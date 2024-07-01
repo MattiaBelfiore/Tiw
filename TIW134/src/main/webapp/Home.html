@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Home</title>
+</head>
+<body>
+	<div align="right">
+		<a th:href="@{/Logout}">Logout</a>
+	</div>
+	<h1>Welcome to the Document Manager Home Page</h1>
+
+	<p th:text="${'It\'s a pleasure seeing you again' + session.user.name + ' ' + session.user.surname}"></p>
+	
+	<h2>Folder List</h2>
+	
+	<div th:if="${folders.size() >0}">
+		<ul>
+        	<li th:each="folder : ${folders}">
+            	<a th:href="@{/folder/{id}(id=${folder.id})}" th:text="${folder.folderName}"></a>
+            	<ul>
+                	<li th:each="subfolder : ${folder.subfolders}">
+                    	<a th:href="@{/subfolder/{id}(id=${subfolder.id})}" th:text="${subfolder.name}"></a>
+                	</li>
+            	</ul>
+        	</li>
+    	</ul>
+	</div>  
+</body>
+</html>
