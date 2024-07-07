@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" type="text/css" media="all" href="/CSS/style.css" th:href="@{/css/style.css}" />
+<title>Media Editor</title>
+</head>
+<body class="start">
+	<div class="contentmanagementdiv">
+        <div class="welcome">
+            <h1>Folder and File Management</h1>
+        </div>
+        <div class="divsignup">
+            <!-- Form to create a folder -->
+            <form action="createRootFolder" method="post">
+                <label for="folderName">Root Folder Name:</label>
+                <input type="text" id="folderName" name="folderName" placeholder="Enter folder name" required>
+                <input type="submit" value="create root folder">
+                <p th:if="${errorMsgRF != null}" th:text=" ${errorMsgRF}"></p>
+            </form>
+            <hr>
+            <form action="createFolder" method="post">
+                <label for="folderName">Folder Name:</label>
+                <input type="text" id="folderName" name="folderName" placeholder="Enter folder name" required>
+                <label for="parentFolder">Parent Folder:</label>
+                <select id="parentFolder" name="parentFolder">
+		            <option th:each="folder : ${folders}" 
+		                    th:value="${folder.folderId}" 
+		                    th:text="${folder.folderName}">Folder Name</option>
+		        </select>
+                <input type="submit" value="create folder">
+                <p th:if="${errorMsgF != null}" th:text=" ${errorMsgF}"></p>
+            </form>
+            <hr>
+            <!-- Form to create a document -->
+            <form action="CreateDocument" method="post">
+                <label for="docName">Document Name:</label>
+                <input type="text" id="docName" name="docName" placeholder="Enter document name" required>
+                <label for="summary">Summary:</label>
+                <input type="text" id="summary" name="summary" placeholder="Enter summary" required>
+                <label for="type">Type:</label>
+                <input type="text" id="type" name="type" placeholder="Enter type" required>
+                <label for="parentFolderDoc">Parent Folder:</label>
+                <select id="parentFolderDoc" name="parentFolderDoc">
+		            <option th:each="folder : ${folders}" 
+		                    th:value="${folder.folderId}" 
+		                    th:text="${folder.folderName}">Folder Name</option>
+		        </select>
+                <input type="submit" value="create document">
+                <p th:if="${errorMsgD != null}" th:text=" ${errorMsgD}"></p>
+            </form>
+        </div>
+    </div>
+    <br>
+	<!-- <a href="#" onclick="history.go(-1)">Go Back</a> -->
+	<a href="GoToHome">Go back</a>
+</body>
+</html>

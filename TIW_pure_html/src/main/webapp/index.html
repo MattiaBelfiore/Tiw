@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8" />
+	<link rel="stylesheet" type="text/css" media="all" href="/CSS/style.css" th:href="@{/css/style.css}" />
+	<title>Login page</title>
+</head>
+
+<body class=start>
+	<div class=basic>
+		<div class=welcome>
+			<h1>Welcome to the Document and Folder Manager</h1>
+		</div>
+	
+		<div class=divlogin>
+			<form action="CheckLogin" method="POST">
+				<input type="text" name="username" placeholder="username" th:value="${username}" required>
+				<input type="password" name="password" placeholder="password" required> 
+				<input id="loginbutton" type="submit" value="login">
+				<p><a href="GoToRegistrationPage">New user? Sign up</a></p>
+				<p th:text=" ${errorMsg}"></p>
+			</form>
+		</div>
+	</div>
+</body>
+</html>

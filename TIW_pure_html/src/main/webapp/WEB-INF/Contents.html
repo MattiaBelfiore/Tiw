@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" type="text/css" media="all" href="/CSS/style.css" th:href="@{/css/style.css}" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+	<title>Contents of Selected Folder</title>
+</head>
+<body class="start">
+    <div class="contentsdiv">
+        <div class="welcome">
+            <h1>Contents of Selected Folder</h1>
+            <h3 th:text="${folder.folderName}"></h3>
+        </div>
+        <div class="divsignup">
+            <!-- Itera sulle cartelle -->
+            <table th:if="${folder.children.size() > 0 || docs.size() > 0}" class="contentstable">
+            	<tr class="heading">
+            		<td>Content name</td>
+            		<td>Open</td>
+            		<td>Move</td>
+            	</tr>
+            	<tr th:each="child : ${folder.children}">
+            		<td class="contentname" th:text="${child.folderName}">Folder Name</td>
+            		<td>
+            			<a th:href="@{/GoToContents(id=${child.folderId})}"><i class="fa-regular fa-folder icon"></i></a>
+            		</td>
+            		<td></td>
+            	</tr>
+            	<tr th:each="doc : ${docs}">
+            		<td class="contentname" th:text="${doc.name}">Folder Name</td>
+					<td>
+						<form th:action="@{/GoToDocumentDetails}" method="post">
+							<input type="hidden" name="folderId" th:value="${folder.folderId}">
+							<input type="hidden" name="docId" th:value="${doc.documentId}">
+							<button class="transparentbutton" type="submit"><i class="fa-regular fa-file icon"></i></button>
+						</form>
+					</td>
+					<td>
+						<form th:action="@{/GoToMoveDocument}" method="post">
+							<input type="hidden" name="folderId" th:value="${folder.folderId}">
+							<input type="hidden" name="docId" th:value="${doc.documentId}">
+							<input type="hidden" name="docName" th:value="${doc.name}">
+							<button class="transparentbutton" type="submit"><i class="fa-solid fa-arrows-up-down-left-right icon"></i></button>
+						</form>
+					</td>
+				</tr>
+            </table>
+			<p th:if="${folder.children.size()==0 && docs.size()==0}" class="emptytext">No contents. Click on the pencil on the previous page to add contents to this folder</p>
+        </div>
+    </div>
+    <br>
+	<a href="GoToHome">Go back</a>
+</body>
+</html>

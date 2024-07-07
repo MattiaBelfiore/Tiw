@@ -1,0 +1,223 @@
+@charset "UTF-8";
+.icon {
+	color: #000000;
+}
+
+.welcome {
+	width: max-content;
+	border-radius: 5px;
+	background-color: white;
+	opacity: 0.9;
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+}
+
+.basic{
+ 	margin-top: 10%;
+}
+
+.registration{
+ 	margin-top: 5%;
+}
+
+.contentmanagementdiv{
+ 	margin-top: 1%;
+}
+
+.contentsdiv{
+ 	margin-top: 5%;
+}
+
+.divlogin {
+	width: 30%;
+	border-radius: 5px;
+	background-color: #f2f2f2;
+	opacity: 0.9;
+	padding: 20px;
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+	margin-top: 50px;
+}
+
+.divsignup{
+	width: 30%;
+	border-radius: 5px;
+	background-color: #f2f2f2;
+	opacity: 0.9;
+	padding: 20px;
+	margin-top: 20px;
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+	margin-top: 20px;
+}
+
+form {
+	text-align: center;
+	font-family: 'Orbitron', courier, sans-serif;
+}
+
+body {
+	text-align: center;
+	font-family: 'Orbitron', courier, sans-serif;
+	background: white;
+}
+
+input[type=text] {
+	width: 90%;
+	padding: 12px 15px;
+	margin: 8px 0;
+	display: inline-block;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	box-sizing: border-box;
+	font-family: 'Orbitron', courier, sans-serif;
+	font-size: 20px;
+}
+
+input[type=password] {
+	width: 90%;
+	padding: 12px 15px;
+	margin: 8px 0;
+	display: inline-block;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	box-sizing: border-box;
+	font-family: 'Orbitron', courier, sans-serif;
+	font-size: 20px;
+}
+
+input[type=submit] {
+	width: 90%;
+	background-color: #0080ff;
+	color: white;
+	padding: 14px 20px;
+	margin: 8px 0;
+	display: inline-block;
+	border: none;
+	border-radius: 4px;
+	font-family: 'Orbitron', courier, sans-serif;
+	cursor: pointer;
+}
+
+input[type=submit]:hover {
+	background-color: #0080c0;
+}
+
+#registrationbutton {
+	display: inline-block;
+}
+
+.logoutbutton {
+	position: absolute;
+	top: 16px;
+	right: 16px;
+	width: 100px;
+	height: 30px;
+	font-size: 20px;
+	font-weight: bold;
+	background-color: #0080ff;
+	border-radius: 6px;
+	border: none;
+	color: white;
+	cursor: pointer;
+	font-family: 'Orbitron', courier, sans-serif;
+}
+
+.gobackbutton {
+	position: absolute;
+	top: 16px;
+	left: 16px;
+	width: 100px;
+	height: 30px;
+	font-size: 20px;
+	font-weight: bold;
+	background-color: #0080ff;
+	border-radius: 6px;
+	border: none;
+	color: white;
+	cursor: pointer;
+	font-family: 'Orbitron', courier, sans-serif;
+	text-decoration: none;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+}
+
+.folderlist {
+	width: 50%;
+	text-align: left;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.folderlist a {
+	text-decoration: underline;
+	color: #0080ff;
+}
+
+.folderlist span {
+	text-decoration: underline;
+	color: #0080ff;
+}
+
+.folderlist ul li{
+	padding-top: 10px;
+}
+
+.contentmanagement {
+	cursor: pointer;
+	text-decoration: none;
+}
+
+#parentFolder, #parentFolderDoc {
+	width: 90%;
+	padding: 12px 15px;
+	margin: 8px 0;
+	display: inline-block;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	box-sizing: border-box;
+	font-family: 'Orbitron', courier, sans-serif;
+	font-size: 20px;
+}
+
+.contentstable {
+	width: 90%;
+	border-collapse: collapse;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.contentstable tr td{
+	border: 1px solid black;
+	padding: 10px;
+}
+
+.contentstable .heading{
+	background-color: #0080ff;
+	color: white;
+}
+
+
+.contentname {
+	text-align: left;
+}
+
+button.transparentbutton {
+    background: none;
+    border: none;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+    outline: none;
+}
+
+.coloredbackground {
+	background-color: red;
+	text-decoration: none !important;
+	color: black !important;
+}

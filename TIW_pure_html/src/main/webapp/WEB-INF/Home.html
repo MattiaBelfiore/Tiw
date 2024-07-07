@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" type="text/css" media="all" href="/CSS/style.css" th:href="@{/css/style.css}" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+	<title>Home</title>
+</head>
+<body>
+	<div class="basic">
+		<form action="Logout" method="get">
+			<button class=logoutbutton type="submit">logout</button>
+		</form>
+		
+		<h1>Welcome to the Document Manager Home Page</h1>
+	
+		<p th:text="${'It\'s a pleasure seeing you again ' + session.user.name + ' ' + session.user.surname}"></p>
+		
+		<h2>Folder List <a href="GoToContentManagement" class="contentmanagement" ><i class="fa-solid fa-pen-to-square icon"></i></a></h2>
+		<div class="folderlist" th:if="${folders.size() >0}">
+			<ul>
+		        <li th:each="folder : ${folders}">
+		        	<a th:if="${!selectingDestination}" 
+			           th:href="@{/GoToContents(id=${folder.folderId})}" 
+			           th:text="${folder.folderName}">
+		            </a>
+		            <a th:if="${selectingDestination && folder.folderId != from}" 
+			           th:href="@{/MoveDocument(docId=${docId}, docName=${docName}, from=${from}, to=${folder.folderId})}" 
+			           th:text="${folder.folderName}">
+			        </a>
+			        <span th:if="${selectingDestination && folder.folderId == from}" 
+			              th:class="'coloredbackground'"
+			              th:text="${folder.folderName}">
+			        </span>
+		            <ul th:insert="~{fragments/folder::folderStructure(folder=${folder}, selectingDestination=${selectingDestination}, docId=${docId}, docName=${docName}, from=${from})}"></ul>
+		        </li>
+		    </ul>
+		</div>  
+		<p th:if="${folders.size() == 0}" class="emptytext">No folders. Click on the pencil to create new ones</p>
+		<p th:if="${successMsg != null}" th:text=" ${successMsg}"></p>
+		<p th:if="${errorMsg != null}" th:text=" ${errorMsg}"></p>
+	</div>
+</body>
+</html>

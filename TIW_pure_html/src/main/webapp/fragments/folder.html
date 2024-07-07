@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:fragment="folderStructure(folder, selectingDestination, docId, docName, from)">
+    <li th:each="child : ${folder.children}">
+        <a th:if="${!selectingDestination}" 
+           th:href="@{/GoToContents(id=${child.folderId})}" 
+           th:text="${child.folderName}"></a>
+        <a th:if="${selectingDestination && child.folderId != from}" 
+           th:href="@{/MoveDocument(docId=${docId}, docName=${docName}, from=${from}, to=${child.folderId})}" 
+           th:text="${child.folderName}"></a>
+        <span th:if="${selectingDestination && child.folderId == from}" 
+              th:class="'coloredbackground'"
+              th:text="${child.folderName}"></span>
+        <ul th:insert="~{fragments/folder :: folderStructure(folder=${child}, selectingDestination=${selectingDestination}, docId=${docId}, docName=${docName}, from=${from})}"></ul>
+    </li>
+</html>
