@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" type="text/css" media="all" href="css/style.css"/>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+	<script src="js/home.js" charset="utf-8" defer></script>
+	<title>Home</title>
+</head>
+<body>
+	<div class="basic">
+		<form action="Logout" method="get">
+			<button class=logoutbutton type="submit">logout</button>
+		</form>
+		
+		<h1>Welcome to the Document Manager Home Page</h1>
+	
+		<p id="welcometext"></p>
+		
+		<h2>Folder List</h2>
+		<div id="folderlist" class="folderlist"></div>  
+		<p id="emptytext" class="emptytext">No folders. Click on the pencil to create new ones</p>
+		<p id="successMsg"></p>
+		<p id="errorMsg"></p>
+	</div>
+</body>
+</html>
