@@ -1,33 +1,46 @@
-$(document).ready(function(){
-    $('#loginbutton').on('click', function(event) {
-        event.preventDefault(); // Evita il submit del form di default
-
-        // Ricava i valori delle caselle di input
-        var username = $('#username').val();
-        var password = $('#password').val();
-
-        // Prepara i dati da inviare
-        var data = {
-            username: username,
-            password: password
-        };
-
-        // Esegui la chiamata AJAX
-        $.ajax({
-            url: 'CheckLogin', // URL dell'endpoint
-            type: 'POST', // Metodo HTTP
-            contentType: 'application/json', // Tipo di contenuto
-            data: JSON.stringify(data), // Dati da inviare, convertiti in JSON
-            success: function(response) {
-                // Gestisci la risposta in caso di successo
-                console.log('Login avvenuto con successo:', response);
-                // Puoi fare altre operazioni qui, come reindirizzare l'utente
-            },
-            error: function(xhr, status, error) {
-                // Gestisci gli errori
-                console.error('Errore durante il login:', error);
-                // Puoi mostrare un messaggio di errore all'utente
-            }
-        });
-    });
+document.getElementById("loginbutton").addEventListener('click', (e) => {
+	var url = "CheckLogin";
+	makePost(url, e.target.closest("form"));
 });
+
+function makePost(url, formElement) {
+	request = new XMLHttpRequest();
+	var formData = new FormData(formElement);
+	request.onreadystatechange = showResults;
+	request.open("POST", url);
+	console.log("sending asynchronous request..."+ formData);
+	request.send(formData);
+}
+
+function showResults() {
+	if (request.readyState == 4) {
+		switch (request.status) {
+			case 200:
+				var message = JSON.parse(request.responseText);
+				sessionStorage.setItem('id', message.id);
+				sessionStorage.setItem('username', message.username);
+				sessionStorage.setItem('name', message.name);
+				sessionStorage.setItem('surname', message.surname);
+				sessionStorage.setItem('email', message.email);
+
+				window.location.href = "Home.html";
+				break;
+
+			case 400: // bad request
+				var message = request.responseText;
+				document.getElementById("errorMsg").textContent = message;
+				break;
+
+			case 401: // unauthorized
+				var message = request.responseText;
+				document.getElementById("errorMsg").textContent = message;
+				break;
+				
+			case 500: // server error
+				var message = request.responseText;
+				document.getElementById("errorMsg").textContent = message;
+				break;
+		}
+	}
+}
+

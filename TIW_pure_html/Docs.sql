@@ -1,8 +1,5 @@
-<<<<<<< HEAD
-=======
 CREATE DATABASE  IF NOT EXISTS `db_gestione_documenti` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `db_gestione_documenti`;
->>>>>>> cd44cdc9d582c87f7dc5dfaf35c236aa8fae8787
 -- MySQL dump 10.13  Distrib 8.0.38, for Win64 (x86_64)
 --
 -- Host: 127.0.0.1    Database: db_gestione_documenti
