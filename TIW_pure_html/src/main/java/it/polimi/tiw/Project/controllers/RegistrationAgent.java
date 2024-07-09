@@ -153,11 +153,7 @@ public class RegistrationAgent extends HttpServlet{
 			try {
 					userDAO.createUser(username, name, surname, email, pwd);
 					
-					ServletContext servletContext = getServletContext();
-					final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
-					ctx.setVariable("correctReg", "La registrazione � andata a buon fine!");
-					path = "CheckLogin";
-					templateEngine.process(path, ctx, response.getWriter());
+					response.sendRedirect("CheckLogin");
 				
 			} catch (SQLException e) { /*la creatwUser pu� lanciare SQL exception in caso di errore del server che non riesce a fare la insert nel DB, in tal caso devo dare messaggio di internal error server*/
 				response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Impossibile creare l'Utente");

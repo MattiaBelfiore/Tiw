@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" media="all" href="css/style.css"/>
+    <script src="js/utility.js" charset="utf-8" defer></script>
+    <script src="js/register.js" charset="utf-8" defer></script>
+    <title>Registration Page</title>
+    
+</head>
+<body class="start">
+    <div class="registration">
+        <div class="welcome">
+            <h1>Welcome to the Document and Folder Manager</h1>
+        </div>
+
+        <div class=divregister>
+			<form id="registrationForm">
+				<input type="text" id="reg_username" name="username" placeholder="username" required>
+				<input type="password" id="reg_password" name="password" placeholder="password" required>
+				<input type="password" id="reg_rptpassword" name="rptpassword" placeholder="repeat password" required>
+				<input type="text" id="name" name="name" placeholder="name" required>
+				<input type="text" id="surname" name="surname" placeholder="surname" required>
+				<input type="email" id="email" name="email" placeholder="email" required>
+				<input id="registerbutton" type="button" value="Register">
+				<p id="regErrorMsg"></p>
+			</form>
+		</div>
+	</div>
+    <br>
+    <a href="#" onclick="history.go(-1)" class="gobackbutton">Go Back</a>
+</body>
+</html>
