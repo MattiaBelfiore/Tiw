@@ -17,6 +17,10 @@
  	margin-top: 10%;
 }
 
+.home{
+ 	margin-top: 2%;
+}
+
 .registration{
  	margin-top: 5%;
 }
@@ -246,4 +250,8 @@ button.transparentbutton {
 	font-size: 15px;
 	background-color: #0080ff;
 	color: white;
+}
+
+.document {
+	text-decoration: underline;
 }

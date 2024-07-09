@@ -8,7 +8,6 @@ function makePost(url, formElement) {
 	var formData = new FormData(formElement);
 	request.onreadystatechange = showResults;
 	request.open("POST", url);
-	console.log("sending asynchronous request..."+ formData);
 	request.send(formData);
 }
 

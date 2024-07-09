@@ -71,6 +71,33 @@ public class DocDAO {
         return docs;
     }
 	
+	public List<Doc> getDocsByOwner(int ownerId) throws SQLException {
+        List<Doc> docs = new ArrayList<>();
+
+        String sql = " SELECT document_id, owner_id, folder_id, doc_name, summary, created_at, type"
+                   + " FROM doc"
+                   + " WHERE owner_id = ?";
+
+        PreparedStatement ps = con.prepareStatement(sql); 
+
+        ps.setInt(1, ownerId);
+
+        try (ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                Doc doc = new Doc();
+                doc.setDocumentId(rs.getInt("document_id"));
+                doc.setOwnerId(rs.getInt("owner_id"));
+                doc.setFolderId(rs.getInt("folder_id"));  
+                doc.setName(rs.getString("doc_name"));
+                doc.setSummary(rs.getString("summary"));
+                doc.setType(rs.getString("type"));
+                docs.add(doc);
+            }
+        }
+        
+        return docs;
+    }
+	
 	public void createDoc(int owner_id, int folder_id, String doc_name, String summary, String type) throws SQLException {
 
 		String query = "INSERT into doc (owner_id, folder_id, doc_name, summary, type) VALUES(?, ?, ?, ?, ?)";
@@ -99,15 +126,14 @@ public class DocDAO {
 		}
 	}
 	
-	public void moveDoc(int owner_id, int doc_id, int from, int to) throws SQLException {
+	public void moveDoc(int owner_id, int doc_id, int to) throws SQLException {
 
-		String query = "UPDATE doc SET folder_id = ? WHERE owner_id = ? AND document_id = ? AND folder_id = ?";
+		String query = "UPDATE doc SET folder_id = ? WHERE owner_id = ? AND document_id = ?";
 		
 		try (PreparedStatement pstatement = con.prepareStatement(query);) {
 			pstatement.setInt(1, to);
 			pstatement.setInt(2, owner_id);
 			pstatement.setInt(3, doc_id);
-			pstatement.setInt(4, from);
 			
 			pstatement.executeUpdate();
 		}
