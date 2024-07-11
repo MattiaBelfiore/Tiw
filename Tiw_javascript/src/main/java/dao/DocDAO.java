@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import beans.Doc;
+import beans.Folder;
 
 public class DocDAO {
 
@@ -98,7 +99,7 @@ public class DocDAO {
         return docs;
     }
 	
-	public void createDoc(int owner_id, int folder_id, String doc_name, String summary, String type) throws SQLException {
+	public Doc createDoc(int owner_id, int folder_id, String doc_name, String summary, String type) throws SQLException {
 
 		String query = "INSERT into doc (owner_id, folder_id, doc_name, summary, type) VALUES(?, ?, ?, ?, ?)";
 		
@@ -111,6 +112,29 @@ public class DocDAO {
 			
 			pstatement.executeUpdate();
 		}
+		
+		String query2 = "SELECT document_id, owner_id, folder_id, doc_name, summary, created_at, type" + " FROM doc"
+				+ " WHERE owner_id = ? AND doc_name = ? AND folder_id = ?";
+		
+		PreparedStatement pstatement = con.prepareStatement(query2);
+		
+		pstatement.setInt(1, owner_id);
+		pstatement.setString(2, doc_name);
+		pstatement.setInt(3, folder_id);
+		
+		try (ResultSet rs = pstatement.executeQuery()) {
+			while (rs.next()) {
+				Doc doc = new Doc();
+                doc.setDocumentId(rs.getInt("document_id"));
+                doc.setOwnerId(rs.getInt("owner_id"));
+                doc.setFolderId(rs.getInt("folder_id"));  
+                doc.setName(rs.getString("doc_name"));
+                doc.setSummary(rs.getString("summary"));
+                doc.setType(rs.getString("type"));
+				return doc;
+			}
+		}
+		return null;
 	}
 
 	public boolean uniqueFile(int ownerId, int folderId, String name) throws SQLException {

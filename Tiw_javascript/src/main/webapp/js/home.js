@@ -63,13 +63,21 @@ function createFolderList(folders) {
         li.setAttribute("folder-id", folder.folderId);
         li.classList.add("folder");
         
-        const addButton = document.createElement('button');
-            addButton.innerHTML = '<i class="fas fa-folder-plus"></i>';
-            addButton.classList.add("transparentbutton");
-            addButton.addEventListener('click', function() {
-                showAddSubfolderInput(li, folder.folderId); 
+        const addSubFolderButton = document.createElement('button');
+        addSubFolderButton.innerHTML = '<i class="fas fa-folder-plus icon"></i>';
+        addSubFolderButton.classList.add("transparentbutton");
+        addSubFolderButton.addEventListener('click', function() {
+            showAddSubfolderInput(li, folder.folderId); 
         });
-        li.appendChild(addButton);
+        li.appendChild(addSubFolderButton);
+        
+        const addDocumentButton = document.createElement('button');
+        addDocumentButton.innerHTML = '<i class="fa-solid fa-file-circle-plus icon"> </i>';
+        addDocumentButton.classList.add("transparentbutton");
+        addDocumentButton.addEventListener('click', function() {
+            showAddDocumentInput(li, folder.folderId);
+        });
+        li.appendChild(addDocumentButton);
            
         const subfolderList = createFolderList(folder.children);
         li.appendChild(subfolderList);
@@ -112,6 +120,53 @@ function showAddSubfolderInput(parentElement, parentId) {
     parentElement.appendChild(inputContainer);
 }
 
+// Funzione per mostrare il campo di input per l'aggiunta di una sottocartella
+function showAddDocumentInput(parentElement, parentId) {
+    // Rimuovi qualsiasi input esistente
+    const existingInputContainer = folderlist.querySelector('.inputcontainer');
+    if (existingInputContainer) {
+        existingInputContainer.remove();
+    }
+
+    // Crea un contenitore per l'input e il pulsante di invio
+    const inputContainer = document.createElement('div');
+    inputContainer.classList.add('inputcontainer');
+
+    const inputName = document.createElement('input');
+    inputName.type = 'text';
+    inputName.placeholder = 'document\'s name';
+    inputName.classList.add("adddocumenttext");
+    
+    const inputSummary = document.createElement('input');
+    inputSummary.type = 'text';
+    inputSummary.placeholder = 'document\'s summary';
+    inputSummary.classList.add("adddocumenttext");
+    
+    const inputType = document.createElement('input');
+    inputType.type = 'text';
+    inputType.placeholder = 'document\'s type';
+    inputType.classList.add("adddocumenttext");
+
+    const submitButton = document.createElement('button');
+    submitButton.textContent = 'add';
+    submitButton.classList.add("adddocumentbutton");
+    submitButton.addEventListener('click', function() {
+        const documentName = inputName.value;
+        const documentSummary = inputSummary.value;
+        const documentType = inputType.value;
+        if (documentName && documentSummary && documentType) {
+            addDocument(parentId, documentName, documentSummary, documentType, parentElement);
+            inputContainer.remove();
+        }
+    });
+
+    inputContainer.appendChild(inputName);
+    inputContainer.appendChild(inputSummary);
+    inputContainer.appendChild(inputType);
+    inputContainer.appendChild(submitButton);
+    parentElement.appendChild(inputContainer);
+}
+
 // Funzione per fare la chiamata AJAX per aggiungere una sottocartella
 function addSubfolder(parentId, subfolderName, parentElement) {
 	var userId = parseInt(sessionStorage.getItem("id"));
@@ -133,14 +188,22 @@ function addSubfolder(parentId, subfolderName, parentElement) {
 	        newSubfolderElement.setAttribute("folder-id", data.folderId);
 	        newSubfolderElement.classList.add("folder");
 	
-	        const addButton = document.createElement('button');
-	        addButton.innerHTML = '<i class="fas fa-folder-plus"> </i>';
-	        addButton.classList.add("transparentbutton");
-	        addButton.addEventListener('click', function() {
+	        const addSubfolderButton = document.createElement('button');
+	        addSubfolderButton.innerHTML = '<i class="fas fa-folder-plus icon"> </i>';
+	        addSubfolderButton.classList.add("transparentbutton");
+	        addSubfolderButton.addEventListener('click', function() {
 	            showAddSubfolderInput(newSubfolderElement, data.folderId);
 	        });
-	
-	        newSubfolderElement.appendChild(addButton);
+	        newSubfolderElement.appendChild(addSubfolderButton);
+	        
+	        const addDocumentButton = document.createElement('button');
+	        addDocumentButton.innerHTML = '<i class="fa-solid fa-file-circle-plus icon"> </i>';
+	        addDocumentButton.classList.add("transparentbutton");
+	        addDocumentButton.addEventListener('click', function() {
+	            showAddDocumentInput(newSubfolderElement, data.folderId);
+	        });
+	        newSubfolderElement.appendChild(addDocumentButton);
+	        
 	        const ul = parentElement.querySelector('ul') || document.createElement('ul');
 	        ul.appendChild(newSubfolderElement);
 	        parentElement.appendChild(ul);
@@ -149,6 +212,54 @@ function addSubfolder(parentId, subfolderName, parentElement) {
 		}
     })
     .catch(error => console.error('Errore durante l\'aggiunta della sottocartella:', error));
+}
+
+// Funzione per fare la chiamata AJAX per aggiungere una sottocartella
+function addDocument(parentId, docName, docSummary, docType, parentElement) {
+	var userId = parseInt(sessionStorage.getItem("id"));
+    
+    const data = new FormData();
+    data.append('userId', userId);
+    data.append('parentId', parentId);
+    data.append('docName', docName);
+    data.append('docSummary', docSummary);
+    data.append('docType', docType);
+    
+    console.log("Name: " + docName);
+    console.log("Summary: " + docSummary);
+    console.log("docType: " + docType);
+
+    fetch('CreateDocument', {
+        method: 'POST',
+        body: data
+    })
+    .then(response => {
+        return !response.ok ? response.json().then(errorData => {
+            throw new Error(errorData.error);
+        }) : response.json();
+	})
+    .then(data => {
+		if(data) {
+			document.getElementById("errorMsg").innerHTML = "";
+			
+	        const li = document.createElement('li');
+	        li.textContent = data.name;
+	        li.classList.add("document");
+	        li.setAttribute('draggable', 'true');
+	        li.setAttribute('doc-id', data.documentId); 
+	        li.setAttribute('doc-name', data.name); 
+	        li.addEventListener('dragstart', handleDragStart);
+	        
+	        const ul = parentElement.querySelector('ul') || document.createElement('ul');
+	        ul.appendChild(li);
+	        parentElement.appendChild(ul);
+        } else {
+			//error
+		}
+    })
+    .catch(error => {
+		document.getElementById("errorMsg").innerHTML = error;
+	});
 }
 
 function enableDragAndDrop() {

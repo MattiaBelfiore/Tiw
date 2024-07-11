@@ -1,6 +1,6 @@
 @charset "UTF-8";
 .icon {
-	color: #000000;
+	color: #0080ff;
 }
 
 .welcome {
@@ -230,7 +230,7 @@ button.transparentbutton {
 .addsubfoldertext {
 	width: 50%;
 	padding: 6px 7.5px;
-	margin: 8px 0;
+	margin: 8px 8px;
 	display: inline-block;
 	border: 1px solid #ccc;
 	border-radius: 4px;
@@ -254,4 +254,42 @@ button.transparentbutton {
 
 .document {
 	text-decoration: underline;
+}
+
+.adddocumenttext {
+	width: 50%;
+	padding: 6px 7.5px;
+	margin: 8px 8px 0 0;
+	display: inline-block;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	box-sizing: border-box;
+	font-family: 'Orbitron', courier, sans-serif;
+	font-size: 15px;
+}
+
+.adddocumentbutton {
+	padding: 6px 7.5px;
+	display: inline-block;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	box-sizing: border-box;
+	font-family: 'Orbitron', courier, sans-serif;
+	font-size: 15px;
+	background-color: #0080ff;
+	color: white;
+}
+
+#errorMsg {
+	color: red;
+}
+
+@media (max-width: 480px) {
+	.divlogin {
+		width: 90%;
+	}
+	
+	.folderlist {
+		width: 95%;
+	}
 }
