@@ -33,7 +33,8 @@ CREATE TABLE `doc` (
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `type` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`document_id`),
-  UNIQUE KEY `document_id` (`document_id`)
+  UNIQUE KEY `document_id` (`document_id`),
+  FOREIGN KEY (`folder_id`) REFERENCES `folder` (`folder_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=135 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -61,7 +62,8 @@ CREATE TABLE `folder` (
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `parent_folder_id` int DEFAULT NULL,
   PRIMARY KEY (`folder_id`),
-  UNIQUE KEY `folder_id` (`folder_id`)
+  UNIQUE KEY `folder_id` (`folder_id`),
+  FOREIGN KEY (`parent_folder_id`) REFERENCES `folder` (`folder_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import beans.User;
 import dao.DocDAO;
 import utils.ConnectionHandler;
 
@@ -29,10 +28,9 @@ public class RemoveDoc extends HttpServlet{
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         int docId = Integer.parseInt(request.getParameter("docId"));
-        User user = (User) request.getSession().getAttribute("user");
 
         DocDAO docDAO = new DocDAO(connection);
-        if (docDAO.removeDoc(docId, user.getId()))
+        if (docDAO.removeDoc(docId))
             response.setStatus(HttpServletResponse.SC_OK);
         else
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);

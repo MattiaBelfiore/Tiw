@@ -163,7 +163,7 @@ public class DocDAO {
 		}
 	}
 
-	public boolean removeDoc(int docId, int id) {
+	public boolean removeDoc(int docId) {
 		
 		String query = "DELETE FROM doc WHERE document_id = ?";
 

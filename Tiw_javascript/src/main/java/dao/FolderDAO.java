@@ -218,6 +218,16 @@ public class FolderDAO {
 			}
 		}
 	}
+
+	public boolean removeFolder(int folderId, int userId) throws SQLException {
+        String query = "DELETE FROM folder WHERE folder_id = ? AND owner_id = ?";
+        try (PreparedStatement pstatement = con.prepareStatement(query)) {
+            pstatement.setInt(1, folderId);
+            pstatement.setInt(2, userId);
+            int affectedRows = pstatement.executeUpdate();
+            return affectedRows > 0;
+        }
+    }
 	
 
 }
