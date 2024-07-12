@@ -69,7 +69,7 @@ body {
 	background: white;
 }
 
-#username {
+.divlogin input[type=text], .divlogin input[type=password]  {
 	width: 90%;
 	padding: 12px 15px;
 	margin: 8px 0;
@@ -81,7 +81,7 @@ body {
 	font-size: 20px;
 }
 
-#password {
+.divsignup input[type=text], .divsignup input[type=password] {
 	width: 90%;
 	padding: 12px 15px;
 	margin: 8px 0;
@@ -164,8 +164,7 @@ input[type=submit]:hover {
 }
 
 .folderlist span {
-	text-decoration: underline;
-	color: #0080ff;
+	text-decoration: none;
 }
 
 .folderlist ul li{
@@ -282,6 +281,11 @@ button.transparentbutton {
 
 #errorMsg {
 	color: red;
+}
+
+.emptytext {
+	margin-top: 100px;
+	margin-bottom: 100px;
 }
 
 @media (max-width: 480px) {

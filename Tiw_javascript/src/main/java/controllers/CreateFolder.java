@@ -30,15 +30,16 @@ public class CreateFolder extends HttpServlet{
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        int ownerId = 0, parentId = 0;
+        int ownerId = 0;
         String foldername = null;
+        String parentId = null;
         
         try {
             // Estrai i parametri dalla request
             ownerId = Integer.parseInt(request.getParameter("userId"));
             foldername = request.getParameter("folderName");
-            parentId = Integer.parseInt(request.getParameter("parentId"));
-            
+            parentId = request.getParameter("parentId");
+
             // Aggiungi controlli sui parametri
             if (foldername == null || foldername.isEmpty()) {
             	response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -48,17 +49,31 @@ public class CreateFolder extends HttpServlet{
             //controllo che non esistano altre folders con lo stesso nome
             try { 
     			FolderDAO folderDAO = new FolderDAO(connection);
-    			if(!folderDAO.uniqueFolder(ownerId , parentId, foldername)) {
-    				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-    				response.getWriter().println("A folder with the same name already exists");
+    			if(!parentId.isEmpty()) {
+	    			if(!folderDAO.uniqueFolder(ownerId , Integer.parseInt(parentId), foldername)) {
+	    				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+	    				response.getWriter().println("A folder with the same name already exists");
+	    			} else {
+	                    Folder newFolder = folderDAO.createFolder(ownerId, foldername, Integer.parseInt(parentId));
+	                    String serialized_folder = new Gson().toJson(newFolder);
+	            		response.setStatus(HttpServletResponse.SC_OK);
+	            		response.setContentType("application/json");
+	            		response.setCharacterEncoding("UTF-8");
+	            		response.getWriter().println(serialized_folder);
+	                }
     			} else {
-                    Folder newFolder = folderDAO.createFolder(ownerId, foldername, parentId);
-                    String serialized_folder = new Gson().toJson(newFolder);
-            		response.setStatus(HttpServletResponse.SC_OK);
-            		response.setContentType("application/json");
-            		response.setCharacterEncoding("UTF-8");
-            		response.getWriter().println(serialized_folder);
-                }
+    				if(!folderDAO.uniqueRoot(ownerId, foldername)) {
+	    				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+	    				response.getWriter().println("A folder with the same name already exists");
+	    			} else {
+	                    Folder newFolder = folderDAO.createRootFolder(ownerId, foldername);
+	                    String serialized_folder = new Gson().toJson(newFolder);
+	            		response.setStatus(HttpServletResponse.SC_OK);
+	            		response.setContentType("application/json");
+	            		response.setCharacterEncoding("UTF-8");
+	            		response.getWriter().println(serialized_folder);
+	                }
+    			}
     		}catch(SQLException e) {
     			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Impossibile controllare se il nome utente esiste già");
     		}

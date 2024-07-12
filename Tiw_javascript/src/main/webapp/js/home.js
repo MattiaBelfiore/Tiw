@@ -5,6 +5,16 @@ window.addEventListener("load", () => {
         fetchFolders(); 
         initTrashCan();
         document.getElementById("welcometext").innerHTML = "It's a pleasure seeing you again " + sessionStorage.getItem("name") + " " + sessionStorage.getItem("surname");
+        
+        const folderListTitle = document.getElementById("folderlisttitle");
+        const folderList = document.getElementById("folderlist");
+        const addRootFolderButton = document.createElement('button');
+        addRootFolderButton.innerHTML = '<i class="fas fa-folder-plus icon"></i>';
+        addRootFolderButton.classList.add("transparentbutton");
+        addRootFolderButton.addEventListener('click', function() {
+            showAddSubfolderInput(folderList, ""); 
+        });
+        folderListTitle.appendChild(addRootFolderButton);
     }
 }, false);
 
@@ -18,6 +28,8 @@ function fetchFolders() {
             const folderList = createFolderList(data);
             folderContainer.appendChild(folderList);
             document.getElementById('emptytext').style.visibility = "hidden";
+            document.getElementById('emptytext').classList.remove("emptytext");
+            document.getElementById('trash').style.visibility = "visible";
             enableDragAndDrop();
         }
         fetchDocs();
@@ -45,7 +57,7 @@ function fetchDocs() {
                         li.setAttribute('draggable', 'true');
                         li.setAttribute('doc-id', doc.documentId); 
                         li.setAttribute('doc-name', doc.name); 
-                        li.addEventListener('dragstart', handleDragStart);
+                        li.addEventListener('dragstart', handleDragStartDoc);
                         ul.appendChild(li);
                     }
                 }
@@ -60,9 +72,14 @@ function createFolderList(folders) {
     const ul = document.createElement('ul');
     folders.forEach(folder => {
         const li = document.createElement('li');
-        li.textContent = folder.folderName;
-        li.setAttribute("folder-id", folder.folderId);
+        const span = document.createElement('span');
         li.classList.add("folder");
+        li.setAttribute("folder-id", folder.folderId);
+        
+        span.textContent = folder.folderName;
+        span.setAttribute('draggable', 'true');
+        span.addEventListener('dragstart', (event) => handleDragStartFolder(event, folder.folderId));
+        li.appendChild(span);
         
         const addSubFolderButton = document.createElement('button');
         addSubFolderButton.innerHTML = '<i class="fas fa-folder-plus icon"></i>';
@@ -184,10 +201,19 @@ function addSubfolder(parentId, subfolderName, parentElement) {
     .then(response => response.json())
     .then(data => {
         if(data) {
+			document.getElementById('emptytext').style.visibility = "hidden";
+			document.getElementById('emptytext').classList.remove("emptytext");
+			document.getElementById('trash').style.visibility = "visible";
+			
             const newSubfolderElement = document.createElement('li');
-            newSubfolderElement.textContent = data.folderName;
-            newSubfolderElement.setAttribute("folder-id", data.folderId);
+            const spanElement = document.createElement('span');
             newSubfolderElement.classList.add("folder");
+            newSubfolderElement.setAttribute("folder-id", data.folderId);
+            
+            spanElement.textContent = data.folderName;
+            spanElement.setAttribute('draggable', 'true');
+        	spanElement.addEventListener('dragstart', (event) => handleDragStartFolder(event, data.folderId));
+        	newSubfolderElement.appendChild(spanElement);
 
             const addSubfolderButton = document.createElement('button');
             addSubfolderButton.innerHTML = '<i class="fas fa-folder-plus icon"> </i>';
@@ -249,7 +275,7 @@ function addDocument(parentId, docName, docSummary, docType, parentElement) {
             li.setAttribute('draggable', 'true');
             li.setAttribute('doc-id', data.documentId); 
             li.setAttribute('doc-name', data.name); 
-            li.addEventListener('dragstart', handleDragStart);
+            li.addEventListener('dragstart', handleDragStartDoc);
             
             const ul = parentElement.querySelector('ul') || document.createElement('ul');
             ul.appendChild(li);
@@ -271,8 +297,12 @@ function enableDragAndDrop() {
     });
 }
 
-function handleDragStart(event) {
-    event.dataTransfer.setData('text/plain', event.target.getAttribute('doc-id'));
+function handleDragStartDoc(event) {
+    event.dataTransfer.setData('text/plain', "d-" + event.target.getAttribute('doc-id'));
+}
+
+function handleDragStartFolder(event, folderId) {
+    event.dataTransfer.setData('text/plain', "f-" + folderId);
 }
 
 function handleDragOver(event) {
@@ -325,27 +355,55 @@ function initTrashCan() {
 
     // handle the deletion of the file dropped
     document.getElementById("trash").addEventListener("drop", (event) => {
-        event.preventDefault();
-        const docId = event.dataTransfer.getData('text/plain');
+        const text = event.dataTransfer.getData('text/plain');
+        console.log(text);
         const answer = confirm("This action can not be undone!\nDo you want to proceed?");
-
+        
         if (answer === true) {
             // Make an AJAX call to delete the document
-            fetch('docDeleter?docId=' + docId, {
-                method: 'GET'
-            })
-            .then(response => {
-                if (response.ok && response.status == 200) {
-                    alert("Doc successfully deleted!");
-                    const documentElement = document.querySelector(`[doc-id="${docId}"]`);
-                    if (documentElement) {
-                        documentElement.remove();
-                    }
-                } else {
-                    alert("Error deleting the document.");
-                }
-            })
-            .catch(error => console.error('Error deleting the document:', error));
+            if(text.startsWith('d-')) {
+				const docId = text.split('-')[1];
+	            fetch('docDeleter?docId=' + docId, {
+	                method: 'GET'
+	            })
+	            .then(response => {
+	                if (response.ok && response.status == 200) {
+	                    alert("Doc successfully deleted!");
+	                    const documentElement = document.querySelector(`[doc-id="${docId}"]`);
+	                    if (documentElement) {
+	                        documentElement.remove();
+	                    }
+	                } else {
+	                    alert("Error deleting the document.");
+	                }
+	            })
+	            .catch(error => console.error('Error deleting the document:', error));
+            }
+            else if (text.startsWith('f-')) {
+				const folderId = text.split('-')[1];
+				fetch('folderDeleter?folderId=' + text.split('-')[1], {
+	                method: 'GET'
+	            })
+	            .then(response => {
+	                if (response.ok && response.status == 200) {
+	                    alert("Folder successfully deleted!");
+	                    const documentElement = document.querySelector(`[folder-id="${folderId}"]`);
+	                    if (documentElement) {
+	                        documentElement.remove();
+	                    }
+	                    
+			            if(document.querySelectorAll('.folder').length == 0) {
+							document.getElementById('emptytext').style.visibility = "visible";
+							document.getElementById('emptytext').classList.add("emptytext");
+							document.getElementById('trash').style.visibility = "hidden";
+						}
+	                } 
+	                else {
+	                    alert("Error deleting the document.");
+	                }
+	            })
+	            .catch(error => console.error('Error deleting the document:', error));
+			}
         }
     });
 }

@@ -27,7 +27,7 @@ DROP TABLE IF EXISTS `doc`;
 CREATE TABLE `doc` (
   `document_id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `owner_id` int DEFAULT NULL,
-  `folder_id` int DEFAULT NULL,
+  `folder_id` bigint unsigned DEFAULT NULL,
   `doc_name` varchar(100) NOT NULL,
   `summary` text,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
@@ -60,7 +60,7 @@ CREATE TABLE `folder` (
   `owner_id` int DEFAULT NULL,
   `folder_name` varchar(100) NOT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `parent_folder_id` int DEFAULT NULL,
+  `parent_folder_id` bigint unsigned DEFAULT NULL,
   PRIMARY KEY (`folder_id`),
   UNIQUE KEY `folder_id` (`folder_id`),
   FOREIGN KEY (`parent_folder_id`) REFERENCES `folder` (`folder_id`) ON DELETE CASCADE

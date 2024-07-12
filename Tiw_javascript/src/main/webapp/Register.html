@@ -14,16 +14,22 @@
             <h1>Welcome to the Document and Folder Manager</h1>
         </div>
 
-        <div class=divregister>
-			<form id="registrationForm">
-				<input type="text" id="reg_username" name="username" placeholder="username" required>
-				<input type="password" id="reg_password" name="password" placeholder="password" required>
-				<input type="password" id="reg_rptpassword" name="rptpassword" placeholder="repeat password" required>
-				<input type="text" id="name" name="name" placeholder="name" required>
-				<input type="text" id="surname" name="surname" placeholder="surname" required>
-				<input type="email" id="email" name="email" placeholder="email" required>
-				<input id="registerbutton" type="button" value="Register">
-				<p id="regErrorMsg"></p>
+        <div class="divsignup">
+			<form action="RegistrationAgent" method="POST">
+				<label>Name:</label>
+				<input type="text" name="name" id="name" placeholder="name" required>
+				<label>Surname:</label>
+				<input type="text" name="surname" id="surname" placeholder="surname" required>
+				<label>Username:</label>
+				<input type="text" name="username" id="username" placeholder="username" required>
+				<label>Email:</label>
+				<input type="text" name="email" id="email" placeholder="email" required>
+				<label>Password:</label>
+				<input type="password" name="password" id="password" placeholder="password" required>
+				<label>Repeat password:</label>
+				<input type="password" name="repeat_password" id="rpt_password" placeholder="repeat password" required>
+				<input id="registerbutton" type="button" value="sign up">
+				<p id="errorMsg"></p>
 			</form>
 		</div>
 	</div>

@@ -143,7 +143,7 @@ public class FolderDAO {
         return folder;
     }
 
-	public void createRootFolder(int ownerId, String foldername) throws SQLException {
+	public Folder createRootFolder(int ownerId, String foldername) throws SQLException {
 		String query = "INSERT into folder (owner_id, folder_name) VALUES(?, ?)";
 		
 		try (PreparedStatement pstatement = con.prepareStatement(query);) {
@@ -152,6 +152,27 @@ public class FolderDAO {
 			
 			pstatement.executeUpdate();
 		}
+		
+		String query2 = "SELECT folder_id, owner_id, folder_name, created_at, parent_folder_id" + " FROM folder"
+				+ " WHERE owner_id = ? AND folder_name = ?";
+		
+		PreparedStatement pstatement = con.prepareStatement(query2);
+		
+		pstatement.setInt(1, ownerId);
+		pstatement.setString(2, foldername);
+		
+		try (ResultSet rs = pstatement.executeQuery()) {
+			while (rs.next()) {
+				Folder f = new Folder();
+				f.setFolderId(rs.getInt("folder_id"));
+				f.setOwnerId(rs.getInt("owner_id"));
+				f.setFolderName(rs.getString("folder_name"));
+				f.setCreatedAt(rs.getString("created_at"));
+				f.setParentFolderId(rs.getObject("parent_folder_id", Integer.class));
+				return f;
+			}
+		}
+		return null;
 		
 	}
 	

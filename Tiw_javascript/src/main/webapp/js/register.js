@@ -1,8 +1,8 @@
 document.getElementById("registerbutton").addEventListener('click', (e) => {
     var form = e.target.closest("form");
-    var password = form.querySelector("#reg_password").value;
-    var confirmPassword = form.querySelector("#reg_rptpassword").value;
-    var errorMsg = form.querySelector("#regErrorMsg");
+    var password = form.querySelector("#password").value;
+    var confirmPassword = form.querySelector("#rpt_password").value;
+    var errorMsg = form.querySelector("#errorMsg");
     // Clear previous error messages
     errorMsg.textContent = "";
     
@@ -34,7 +34,6 @@ function makePost(url, formElement) {
         }
     };
     request.open("POST", url);
-    console.log("Sending asynchronous request..." + formData);
     request.send(formData);
 }
 
@@ -55,7 +54,7 @@ function showRegistrationResults(request) {
 				break;
             case 500: // server error
                 var message = request.responseText;
-                document.getElementById("regErrorMsg").textContent = message;
+                document.getElementById("errorMsg").textContent = message;
                 break;
         }
     }
