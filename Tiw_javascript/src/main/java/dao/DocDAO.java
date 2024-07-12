@@ -162,8 +162,24 @@ public class DocDAO {
 			pstatement.executeUpdate();
 		}
 	}
-	
-	//metodo per aggiungere documenti ad una cartella
-	
-	//metodo per ottenere tutti i documenti in una cartella
+
+	public boolean removeDoc(int docId, int id) {
+		
+		String query = "DELETE FROM doc WHERE document_id = ?";
+
+        PreparedStatement preparedStatement;
+
+        try{
+            preparedStatement = con.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            preparedStatement.setString(1, Integer.toString(docId));
+
+           preparedStatement.executeUpdate();
+           
+           return true;
+        } catch (SQLException e) {
+            System.out.println("Bad prepared statement requesting file in DocDao.java updatePosition()");
+            e.printStackTrace();
+        }
+		return false;
+	}
 }

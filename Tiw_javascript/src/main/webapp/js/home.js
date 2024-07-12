@@ -1,10 +1,11 @@
 window.addEventListener("load", () => {
-	if (sessionStorage.getItem("id") == null) {
-		window.location.href = "index.html";
-	} else {
-		fetchFolders(); 
-		document.getElementById("welcometext").innerHTML = "It's a pleasure seeing you again " + sessionStorage.getItem("name") + " " + sessionStorage.getItem("surname");
-	}
+    if (sessionStorage.getItem("id") == null) {
+        window.location.href = "index.html";
+    } else {
+        fetchFolders(); 
+        initTrashCan();
+        document.getElementById("welcometext").innerHTML = "It's a pleasure seeing you again " + sessionStorage.getItem("name") + " " + sessionStorage.getItem("surname");
+    }
 }, false);
 
 // Funzione per fare la chiamata AJAX
@@ -14,12 +15,12 @@ function fetchFolders() {
     .then(data => {
         const folderContainer = document.getElementById('folderlist');
         if(data && data.length > 0) {
-			const folderList = createFolderList(data);
-        	folderContainer.appendChild(folderList);
-        	document.getElementById('emptytext').style.visibility = "hidden";
-        	enableDragAndDrop();
-		}
-		fetchDocs();
+            const folderList = createFolderList(data);
+            folderContainer.appendChild(folderList);
+            document.getElementById('emptytext').style.visibility = "hidden";
+            enableDragAndDrop();
+        }
+        fetchDocs();
     })
     .catch(error => console.error('Errore durante il fetch:', error));
 }
@@ -30,26 +31,26 @@ function fetchDocs() {
     .then(response => response.json())
     .then(data => {
         if(data && data.length > 0) {
-        	data.forEach(doc => {
-            	// Trova la cartella a cui appartiene il documento
-	            const folderElement = document.querySelector(`[folder-id="${doc.folderId}"]`);
-	            if (folderElement) {
-	                // Trova l'ul figlio della cartella
-	                const ul = folderElement.querySelector('ul');
-	                if (ul) {
-	                    // Crea un nuovo li per il documento
-	                    const li = document.createElement('li');
-	                    li.textContent = doc.name;
-	                    li.classList.add("document");
-	                    li.setAttribute('draggable', 'true');
-	                    li.setAttribute('doc-id', doc.documentId); 
-	                    li.setAttribute('doc-name', doc.name); 
-	                    li.addEventListener('dragstart', handleDragStart);
-	                    ul.appendChild(li);
-	                }
-	            }
-        	});
-		}
+            data.forEach(doc => {
+                // Trova la cartella a cui appartiene il documento
+                const folderElement = document.querySelector(`[folder-id="${doc.folderId}"]`);
+                if (folderElement) {
+                    // Trova l'ul figlio della cartella
+                    const ul = folderElement.querySelector('ul');
+                    if (ul) {
+                        // Crea un nuovo li per il documento
+                        const li = document.createElement('li');
+                        li.textContent = doc.name;
+                        li.classList.add("document");
+                        li.setAttribute('draggable', 'true');
+                        li.setAttribute('doc-id', doc.documentId); 
+                        li.setAttribute('doc-name', doc.name); 
+                        li.addEventListener('dragstart', handleDragStart);
+                        ul.appendChild(li);
+                    }
+                }
+            });
+        }
     })
     .catch(error => console.error('Errore durante il fetch:', error));
 }
@@ -120,7 +121,7 @@ function showAddSubfolderInput(parentElement, parentId) {
     parentElement.appendChild(inputContainer);
 }
 
-// Funzione per mostrare il campo di input per l'aggiunta di una sottocartella
+// Funzione per mostrare il campo di input per l'aggiunta di un documento
 function showAddDocumentInput(parentElement, parentId) {
     // Rimuovi qualsiasi input esistente
     const existingInputContainer = folderlist.querySelector('.inputcontainer');
@@ -169,7 +170,7 @@ function showAddDocumentInput(parentElement, parentId) {
 
 // Funzione per fare la chiamata AJAX per aggiungere una sottocartella
 function addSubfolder(parentId, subfolderName, parentElement) {
-	var userId = parseInt(sessionStorage.getItem("id"));
+    var userId = parseInt(sessionStorage.getItem("id"));
     
     const data = new FormData();
     data.append('userId', userId);
@@ -182,41 +183,41 @@ function addSubfolder(parentId, subfolderName, parentElement) {
     })
     .then(response => response.json())
     .then(data => {
-		if(data) {
-	        const newSubfolderElement = document.createElement('li');
-	        newSubfolderElement.textContent = data.folderName;
-	        newSubfolderElement.setAttribute("folder-id", data.folderId);
-	        newSubfolderElement.classList.add("folder");
-	
-	        const addSubfolderButton = document.createElement('button');
-	        addSubfolderButton.innerHTML = '<i class="fas fa-folder-plus icon"> </i>';
-	        addSubfolderButton.classList.add("transparentbutton");
-	        addSubfolderButton.addEventListener('click', function() {
-	            showAddSubfolderInput(newSubfolderElement, data.folderId);
-	        });
-	        newSubfolderElement.appendChild(addSubfolderButton);
-	        
-	        const addDocumentButton = document.createElement('button');
-	        addDocumentButton.innerHTML = '<i class="fa-solid fa-file-circle-plus icon"> </i>';
-	        addDocumentButton.classList.add("transparentbutton");
-	        addDocumentButton.addEventListener('click', function() {
-	            showAddDocumentInput(newSubfolderElement, data.folderId);
-	        });
-	        newSubfolderElement.appendChild(addDocumentButton);
-	        
-	        const ul = parentElement.querySelector('ul') || document.createElement('ul');
-	        ul.appendChild(newSubfolderElement);
-	        parentElement.appendChild(ul);
+        if(data) {
+            const newSubfolderElement = document.createElement('li');
+            newSubfolderElement.textContent = data.folderName;
+            newSubfolderElement.setAttribute("folder-id", data.folderId);
+            newSubfolderElement.classList.add("folder");
+
+            const addSubfolderButton = document.createElement('button');
+            addSubfolderButton.innerHTML = '<i class="fas fa-folder-plus icon"> </i>';
+            addSubfolderButton.classList.add("transparentbutton");
+            addSubfolderButton.addEventListener('click', function() {
+                showAddSubfolderInput(newSubfolderElement, data.folderId);
+            });
+            newSubfolderElement.appendChild(addSubfolderButton);
+            
+            const addDocumentButton = document.createElement('button');
+            addDocumentButton.innerHTML = '<i class="fa-solid fa-file-circle-plus icon"> </i>';
+            addDocumentButton.classList.add("transparentbutton");
+            addDocumentButton.addEventListener('click', function() {
+                showAddDocumentInput(newSubfolderElement, data.folderId);
+            });
+            newSubfolderElement.appendChild(addDocumentButton);
+            
+            const ul = parentElement.querySelector('ul') || document.createElement('ul');
+            ul.appendChild(newSubfolderElement);
+            parentElement.appendChild(ul);
         } else {
-			//error
-		}
+            //error
+        }
     })
     .catch(error => console.error('Errore durante l\'aggiunta della sottocartella:', error));
 }
 
-// Funzione per fare la chiamata AJAX per aggiungere una sottocartella
+// Funzione per fare la chiamata AJAX per aggiungere un documento
 function addDocument(parentId, docName, docSummary, docType, parentElement) {
-	var userId = parseInt(sessionStorage.getItem("id"));
+    var userId = parseInt(sessionStorage.getItem("id"));
     
     const data = new FormData();
     data.append('userId', userId);
@@ -237,29 +238,29 @@ function addDocument(parentId, docName, docSummary, docType, parentElement) {
         return !response.ok ? response.json().then(errorData => {
             throw new Error(errorData.error);
         }) : response.json();
-	})
+    })
     .then(data => {
-		if(data) {
-			document.getElementById("errorMsg").innerHTML = "";
-			
-	        const li = document.createElement('li');
-	        li.textContent = data.name;
-	        li.classList.add("document");
-	        li.setAttribute('draggable', 'true');
-	        li.setAttribute('doc-id', data.documentId); 
-	        li.setAttribute('doc-name', data.name); 
-	        li.addEventListener('dragstart', handleDragStart);
-	        
-	        const ul = parentElement.querySelector('ul') || document.createElement('ul');
-	        ul.appendChild(li);
-	        parentElement.appendChild(ul);
+        if(data) {
+            document.getElementById("errorMsg").innerHTML = "";
+            
+            const li = document.createElement('li');
+            li.textContent = data.name;
+            li.classList.add("document");
+            li.setAttribute('draggable', 'true');
+            li.setAttribute('doc-id', data.documentId); 
+            li.setAttribute('doc-name', data.name); 
+            li.addEventListener('dragstart', handleDragStart);
+            
+            const ul = parentElement.querySelector('ul') || document.createElement('ul');
+            ul.appendChild(li);
+            parentElement.appendChild(ul);
         } else {
-			//error
-		}
+            //error
+        }
     })
     .catch(error => {
-		document.getElementById("errorMsg").innerHTML = error;
-	});
+        document.getElementById("errorMsg").innerHTML = error;
+    });
 }
 
 function enableDragAndDrop() {
@@ -288,30 +289,63 @@ function handleDrop(event) {
         if (documentElement) {
             const userId = parseInt(sessionStorage.getItem("id"));
             const docName = documentElement.getAttribute("doc-name");
-		    const data = new FormData();
-		    data.append('userId', userId);
-		    data.append('docId', docId);
-		    data.append('docName', docName);
-		    data.append('newFolderId', targetFolder.getAttribute("folder-id"));
-		
-		    fetch('MoveDocument', {
-		        method: 'POST',
-		        body: data
-		    })
-		    .then(response => {
-		        if (response.ok && response.status == 200) {
-		            const ul = targetFolder.querySelector('ul') || document.createElement('ul');
-		            ul.appendChild(documentElement);
-		            targetFolder.appendChild(ul);
-		            
-		        } else if (response.status = 400) {
-		            var message = response.json().errorMsg;
-					document.getElementById("errorMsg").innerHTML = message;
-		        }
-		    })
-		    .catch(error => {
-		        document.getElementById("errorMsg").innerHTML = 'Si è verificato un errore durante lo spostamento del documento.';
-		    });
+            const data = new FormData();
+            data.append('userId', userId);
+            data.append('docId', docId);
+            data.append('docName', docName);
+            data.append('newFolderId', targetFolder.getAttribute("folder-id"));
+        
+            fetch('MoveDocument', {
+                method: 'POST',
+                body: data
+            })
+            .then(response => {
+                if (response.ok && response.status == 200) {
+                    const ul = targetFolder.querySelector('ul') || document.createElement('ul');
+                    ul.appendChild(documentElement);
+                    targetFolder.appendChild(ul);
+                    
+                } else if (response.status = 400) {
+                    var message = response.json().errorMsg;
+                    document.getElementById("errorMsg").innerHTML = message;
+                }
+            })
+            .catch(error => {
+                document.getElementById("errorMsg").innerHTML = 'Si è verificato un errore durante lo spostamento del documento.';
+            });
         }
     }
+}
+
+function initTrashCan() {
+    // show element can be dropped here
+    document.getElementById("trash").addEventListener("dragover", (ev) => {
+        ev.preventDefault();
+    });
+
+    // handle the deletion of the file dropped
+    document.getElementById("trash").addEventListener("drop", (event) => {
+        event.preventDefault();
+        const docId = event.dataTransfer.getData('text/plain');
+        const answer = confirm("This action can not be undone!\nDo you want to proceed?");
+
+        if (answer === true) {
+            // Make an AJAX call to delete the document
+            fetch('docDeleter?docId=' + docId, {
+                method: 'GET'
+            })
+            .then(response => {
+                if (response.ok && response.status == 200) {
+                    alert("Doc successfully deleted!");
+                    const documentElement = document.querySelector(`[doc-id="${docId}"]`);
+                    if (documentElement) {
+                        documentElement.remove();
+                    }
+                } else {
+                    alert("Error deleting the document.");
+                }
+            })
+            .catch(error => console.error('Error deleting the document:', error));
+        }
+    });
 }
