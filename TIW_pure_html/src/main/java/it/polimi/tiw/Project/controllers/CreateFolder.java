@@ -62,7 +62,7 @@ public class CreateFolder extends HttpServlet{
     				String errorMsg = "A folder with the same name already exists";
     				response.sendRedirect("GoToContentManagement?errorMsgF=" + URLEncoder.encode(errorMsg, "UTF-8"));
     			} else {
-                    folderDAO.createRootFolder(ownerId, foldername);
+                    folderDAO.createFolder(ownerId, foldername, parentId);
                     response.sendRedirect("GoToHome");
                 }
     		}catch(SQLException e) {
