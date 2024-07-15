@@ -17,6 +17,10 @@
  	margin-top: 10%;
 }
 
+.home{
+ 	margin-top: 2%;
+}
+
 .registration{
  	margin-top: 5%;
 }
@@ -220,4 +224,8 @@ button.transparentbutton {
 	background-color: red;
 	text-decoration: none !important;
 	color: black !important;
+}
+
+.error {
+	color: red;
 }

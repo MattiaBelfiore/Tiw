@@ -19,6 +19,7 @@ import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import it.polimi.tiw.Project.beans.User;
 import it.polimi.tiw.Project.dao.DocDAO;
+import it.polimi.tiw.Project.dao.FolderDAO;
 import it.polimi.tiw.Project.utils.ConnectionHandler;
 
 @WebServlet("/CreateDocument")
@@ -59,23 +60,33 @@ public class CreateDocument extends HttpServlet {
             }
             
             try { 
+            	FolderDAO folderdao = new FolderDAO(connection);
+    			if(!folderdao.checkOwner(ownerId, folderId)) {
+    				String errorMsg = "Unauthorized";
+    				response.sendRedirect("GoToContentManagement?errorMsgD=" + URLEncoder.encode(errorMsg, "UTF-8"));
+    				return;
+    			}
+    			
     			DocDAO docDAO = new DocDAO(connection);
     			if(!docDAO.uniqueFile(ownerId , folderId, name)) {
     				String errorMsg = "A document with the same name already exists";
     				response.sendRedirect("GoToContentManagement?errorMsgD=" + URLEncoder.encode(errorMsg, "UTF-8"));
     			}
                 else {
-                	docDAO.createDoc(ownerId, folderId, name, summary, type);
+                	docDAO.createDoc(folderId, name, summary, type);
                 	response.sendRedirect("GoToHome");
                 }
     		}catch(SQLException e) {
-    			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Impossibile creare il documento");
+    			String errorMsg = "Impossibile creare il documento";
+				response.sendRedirect("GoToContentManagement?errorMsgD=" + URLEncoder.encode(errorMsg, "UTF-8"));
     		}
     
         } catch (NumberFormatException | NullPointerException e) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Impossibile estrarre i parametri della form");
+        	String errorMsg = "Impossibile estrarre i parametri della form";
+			response.sendRedirect("GoToContentManagement?errorMsgD=" + URLEncoder.encode(errorMsg, "UTF-8"));
         } catch (IllegalArgumentException e) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+        	String errorMsg = e.getMessage();
+			response.sendRedirect("GoToContentManagement?errorMsgD=" + URLEncoder.encode(errorMsg, "UTF-8"));
         }
     }
 	

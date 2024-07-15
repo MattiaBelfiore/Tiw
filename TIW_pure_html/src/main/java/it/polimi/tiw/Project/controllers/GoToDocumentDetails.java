@@ -10,6 +10,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
@@ -17,6 +18,7 @@ import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import it.polimi.tiw.Project.beans.Doc;
+import it.polimi.tiw.Project.beans.User;
 import it.polimi.tiw.Project.dao.DocDAO;
 import it.polimi.tiw.Project.utils.ConnectionHandler;
 
@@ -41,11 +43,14 @@ public class GoToDocumentDetails extends HttpServlet {
 	}
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+		HttpSession session = request.getSession(false);
+		User user = (User) session.getAttribute("user");
+        int ownerId = user.getId();
+        
 		DocDAO docdao = new DocDAO(connection);
 		Doc doc = null;
 		try {
-			doc = docdao.getDocById(Integer.parseInt(request.getParameter("docId")));
+			doc = docdao.getDocById(ownerId, Integer.parseInt(request.getParameter("docId")));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

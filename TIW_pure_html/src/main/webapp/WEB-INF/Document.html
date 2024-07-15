@@ -10,11 +10,12 @@
         <div class="welcome">
             <h1>Document Details</h1>
         </div>
-        <div class="divsignup">
+        <div th:if="${document != null}" class="divsignup">
             <p><strong>Name:</strong> <span th:text="${document.name}"></span></p>
             <p><strong>Summary:</strong> <span th:text="${document.summary}"></span></p>
             <p><strong>Type:</strong> <span th:text="${document.type}"></span></p>
         </div>
+        <p th:if="${document == null}" class="emptytext">No contents. Invalid document id</p>
     </div>
     <br>
     <a href="#" onclick="history.go(-1)">Go Back</a>

@@ -17,6 +17,7 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
+import it.polimi.tiw.Project.dao.FolderDAO;
 import it.polimi.tiw.Project.beans.User;
 import it.polimi.tiw.Project.dao.DocDAO;
 import it.polimi.tiw.Project.utils.ConnectionHandler;
@@ -59,13 +60,24 @@ public class MoveDocument extends HttpServlet{
 
         DocDAO docdao = new DocDAO(connection);
         try {
+        	FolderDAO folderdao = new FolderDAO(connection);
+        	if(!folderdao.checkOwner(userId, to) || !folderdao.checkOwner(userId, from)) {
+        		String errorMsg = "Invalid folder";
+				response.sendRedirect("GoToHome?errorMsg=" + URLEncoder.encode(errorMsg, "UTF-8"));
+		        return;
+			}
+        	
         	if(!docdao.uniqueFile(userId , to, docName)) {
         		String errorMsg = "A document with the same name already exists";
 				response.sendRedirect("GoToHome?errorMsg=" + URLEncoder.encode(errorMsg, "UTF-8"));
 			} else {
-				docdao.moveDoc(userId,docId,from,to);
-				String successMsg = "Document successfully moved";
-				response.sendRedirect("GoToHome?successMsg=" + URLEncoder.encode(successMsg, "UTF-8"));
+				if(docdao.moveDoc(docId,from,to)) {
+					String successMsg = "Document successfully moved";
+					response.sendRedirect("GoToHome?successMsg=" + URLEncoder.encode(successMsg, "UTF-8"));
+				} else {
+					String successMsg = "Unauthorized move";
+					response.sendRedirect("GoToHome?errorMsg=" + URLEncoder.encode(successMsg, "UTF-8"));
+				}
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

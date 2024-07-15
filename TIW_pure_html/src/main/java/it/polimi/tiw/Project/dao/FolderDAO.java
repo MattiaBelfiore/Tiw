@@ -18,6 +18,18 @@ public class FolderDAO {
 	public FolderDAO(Connection connection) {
 		this.con = connection;
 	}
+	
+	public boolean checkOwner(int ownerId, int folderId) throws SQLException {
+		String query = "SELECT folder_id FROM folder WHERE folder_id = ? AND owner_id = ?";
+		try (PreparedStatement pstatement = con.prepareStatement(query);) {
+			pstatement.setInt(1, folderId);
+			pstatement.setInt(2, ownerId);
+			
+			try (ResultSet result = pstatement.executeQuery();) {
+				return result.isBeforeFirst();
+			}
+		}
+	}
 
 	public List<Folder> getRootFoldersByOwner(int ownerId) throws SQLException {
         List<Folder> folders = new ArrayList<>();

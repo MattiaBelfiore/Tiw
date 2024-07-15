@@ -10,9 +10,9 @@
     <div class="contentsdiv">
         <div class="welcome">
             <h1>Contents of Selected Folder</h1>
-            <h3 th:text="${folder.folderName}"></h3>
+            <h3 th:if="${folder != null}" th:text="${folder.folderName}"></h3>
         </div>
-        <div class="divsignup">
+        <div th:if="${folder != null}" class="divsignup">
             <!-- Itera sulle cartelle -->
             <table th:if="${folder.children.size() > 0 || docs.size() > 0}" class="contentstable">
             	<tr class="heading">
@@ -48,6 +48,7 @@
             </table>
 			<p th:if="${folder.children.size()==0 && docs.size()==0}" class="emptytext">No contents. Click on the pencil on the previous page to add contents to this folder</p>
         </div>
+        <p th:if="${folder == null}" class="emptytext">No contents. Invalid id folder</p>
     </div>
     <br>
 	<a href="GoToHome">Go back</a>

@@ -58,6 +58,12 @@ public class CreateFolder extends HttpServlet{
             //controllo che non esistano altre folders con lo stesso nome
             try { 
     			FolderDAO folderDAO = new FolderDAO(connection);
+    			if(!folderDAO.checkOwner(ownerId, parentId)) {
+    				String errorMsg = "Unauthorized";
+    				response.sendRedirect("GoToContentManagement?errorMsgF=" + URLEncoder.encode(errorMsg, "UTF-8"));
+    				return;
+    			}
+    			
     			if(!folderDAO.uniqueFolder(ownerId , parentId, foldername)) {
     				String errorMsg = "A folder with the same name already exists";
     				response.sendRedirect("GoToContentManagement?errorMsgF=" + URLEncoder.encode(errorMsg, "UTF-8"));

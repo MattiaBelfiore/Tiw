@@ -47,7 +47,7 @@
 		                    th:text="${folder.folderName}">Folder Name</option>
 		        </select>
                 <input type="submit" value="create document">
-                <p th:if="${errorMsgD != null}" th:text=" ${errorMsgD}"></p>
+                <p th:if="${errorMsgD != null}" th:text=" ${errorMsgD}" class="error"></p>
             </form>
         </div>
     </div>

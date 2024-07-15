@@ -26,7 +26,6 @@ DROP TABLE IF EXISTS `doc`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `doc` (
   `document_id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `owner_id` int DEFAULT NULL,
   `folder_id` bigint unsigned DEFAULT NULL,
   `doc_name` varchar(100) NOT NULL,
   `summary` text,
@@ -34,7 +33,9 @@ CREATE TABLE `doc` (
   `type` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`document_id`),
   UNIQUE KEY `document_id` (`document_id`),
-  FOREIGN KEY (`folder_id`) REFERENCES `folder` (`folder_id`) ON DELETE CASCADE
+  FOREIGN KEY (`folder_id`) REFERENCES `folder` (`folder_id`) 
+  ON UPDATE CASCADE
+  ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=135 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -44,7 +45,7 @@ CREATE TABLE `doc` (
 
 LOCK TABLES `doc` WRITE;
 /*!40000 ALTER TABLE `doc` DISABLE KEYS */;
-INSERT INTO `doc` VALUES (1,2,4,'Documento 1','Questo è il contenuto del Documento 1','2024-07-05 09:14:58',NULL),(2,2,4,'Documento 2','Questo è il contenuto del Documento 2','2024-07-05 09:14:58',NULL);
+INSERT INTO `doc` VALUES (1,4,'Documento 1','Questo è il contenuto del Documento 1','2024-07-05 09:14:58',NULL),(2,4,'Documento 2','Questo è il contenuto del Documento 2','2024-07-05 09:14:58',NULL);
 /*!40000 ALTER TABLE `doc` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -63,7 +64,9 @@ CREATE TABLE `folder` (
   `parent_folder_id` bigint unsigned DEFAULT NULL,
   PRIMARY KEY (`folder_id`),
   UNIQUE KEY `folder_id` (`folder_id`),
-  FOREIGN KEY (`parent_folder_id`) REFERENCES `folder` (`folder_id`) ON DELETE CASCADE
+  FOREIGN KEY (`parent_folder_id`) REFERENCES `folder` (`folder_id`) 
+  ON UPDATE CASCADE
+  ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
