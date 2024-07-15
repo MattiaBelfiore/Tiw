@@ -15,7 +15,7 @@ import beans.User;
 import dao.FolderDAO;
 import utils.ConnectionHandler;
 
-@WebServlet("/folderDeleter")
+@WebServlet("/folderDeleter/*")
 @MultipartConfig
 
 public class RemoveFolder extends HttpServlet{
@@ -26,20 +26,27 @@ public class RemoveFolder extends HttpServlet{
         connection = ConnectionHandler.getConnection(getServletContext());
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        int folderId;
-        try {
-            folderId = Integer.parseInt(request.getParameter("folderId"));
-        } catch (NumberFormatException | NullPointerException e) {
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            response.getWriter().println("Invalid folder ID");
-            return;
-        }
-
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         User user = (User) request.getSession().getAttribute("user");
         if (user == null) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.getWriter().println("User not authenticated");
+            return;
+        }
+        
+        String pathInfo = request.getPathInfo();
+        if (pathInfo == null || pathInfo.equals("/")) {
+        	response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+	        response.getWriter().println("Invalid request");
+            return;
+        }
+        
+        int folderId;
+        try {
+            folderId = Integer.parseInt(pathInfo.substring(1));
+        } catch (NumberFormatException | NullPointerException e) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getWriter().println("Invalid folder ID");
             return;
         }
 
@@ -56,10 +63,6 @@ public class RemoveFolder extends HttpServlet{
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.getWriter().println("Internal server error");
         }
-    }
-
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        doGet(request, response);
     }
 
     public void destroy() {

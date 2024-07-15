@@ -6,6 +6,7 @@
 	<link rel="stylesheet" type="text/css" media="all" href="css/style.css"/>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 	<script src="js/home.js" charset="utf-8" defer></script>
+	<script src="js/utility.js" charset="utf-8" defer></script>
 	<title>Home</title>
 </head>
 <body>
@@ -21,10 +22,13 @@
 		<h2 id="folderlisttitle">Folder List</h2>
 		<p id="successMsg"></p>
 		<p id="errorMsg"></p>
-		<div id="folderlist" class="folderlist"></div>  
+		<div id="folderlist" class="folderlist">
+			<div id="trashcontainer">
+				<img id="trash" src="trash_can.png" alt="trash can" width="30" height="35" class="masked" style="visibility: hidden"><br>
+				<label>Bin</label>
+			</div>
+		</div>  
 		<p id="emptytext" class="emptytext">No folders. Click on the button to create new ones</p>
-		<img id="trash" src="trash_can.png" alt="trash can" width="30" height="35" class="masked" style="visibility: hidden">
-		<div class="center" id = "filesDiv"></div>
 	</div>
 </body>
 </html>

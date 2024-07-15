@@ -15,6 +15,7 @@ import com.google.gson.Gson;
 
 import beans.Doc;
 import dao.DocDAO;
+import dao.FolderDAO;
 import utils.ConnectionHandler;
 
 @WebServlet("/CreateDocument")
@@ -44,19 +45,24 @@ public class CreateDocument extends HttpServlet{
             // Aggiungi controlli sui parametri
             if (docName == null || docName.isEmpty() || docSummary == null || docSummary.isEmpty() || docType == null || docType.isEmpty()) {
             	response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-    			response.getWriter().println("Name, summary and type must be not null");
+		        response.getWriter().println("Name, summary and type must be not null");
             }
             
             try { 
+            	FolderDAO folderdao = new FolderDAO(connection);
+            	if(!folderdao.checkOwner(ownerId, parentId)) {
+    				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+    		        response.getWriter().println("Invalid folder");
+    		        return;
+    			}	
+            	
     			DocDAO docDAO = new DocDAO(connection);
     			if(!docDAO.uniqueFile(ownerId, parentId, docName)) {
     				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-    		        response.setContentType("application/json");
-    		        response.setCharacterEncoding("UTF-8");
-    		        response.getWriter().println("{\"error\": \"A document with the same name already exists\"}");
+    		        response.getWriter().println("A document with the same name already exists");
     			}
                 else {
-                	Doc newDoc = docDAO.createDoc(ownerId, parentId, docName, docSummary, docType);
+                	Doc newDoc = docDAO.createDoc(parentId, docName, docSummary, docType);
                 	String serialized_doc = new Gson().toJson(newDoc);
             		response.setStatus(HttpServletResponse.SC_OK);
             		response.setContentType("application/json");
@@ -65,15 +71,15 @@ public class CreateDocument extends HttpServlet{
                 }
     		}catch(SQLException e) {
     			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-    		    response.setContentType("application/json");
-    		    response.setCharacterEncoding("UTF-8");
-    		    response.getWriter().println("{\"error\": \"The document can't be created\"}");
+		        response.getWriter().println("The document can't be created");
     		}
 
         } catch (NumberFormatException | NullPointerException e) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Impossibile estrarre i parametri della form");
+        	response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+	        response.getWriter().println("Invalid parameters");
         } catch (IllegalArgumentException e) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+        	response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+	        response.getWriter().println(e.getMessage());
         }
     }
 	

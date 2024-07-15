@@ -11,7 +11,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.gson.Gson;
+
+import beans.Doc;
 import dao.DocDAO;
+import dao.FolderDAO;
 import utils.ConnectionHandler;
 
 @WebServlet("/MoveDocument")
@@ -26,7 +30,7 @@ public class MoveDocument extends HttpServlet{
 	}
 
 	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int ownerId = 0, docId = 0, newFolderId = 0; 
         String docName = null;
         
@@ -40,36 +44,43 @@ public class MoveDocument extends HttpServlet{
             // Aggiungi controlli sui parametri
             if (newFolderId == 0 || docId == 0) {
             	response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-    			response.getWriter().println("Wrong data");
+		        response.getWriter().println("Wrong data");
             }
             
             //controllo che non esistano altre folders con lo stesso nome
             try { 
+            	FolderDAO folderdao = new FolderDAO(connection);
+            	if(!folderdao.checkOwner(ownerId, newFolderId)) {
+    				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+    		        response.getWriter().println("Invalid folder");
+    		        return;
+    			}
+            	
     			DocDAO docdao = new DocDAO(connection);
     			if(!docdao.uniqueFile(ownerId , newFolderId, docName)) {
     				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-    				response.setContentType("application/json");
-            		response.setCharacterEncoding("UTF-8");
-            		response.getWriter().println("{'errorMsg': 'A folder with the same name already exists'}");
+    		        response.getWriter().println("A document with the same name already exists");
     			} else {
-                    docdao.moveDoc(ownerId, docId, newFolderId);
+                    Doc updatedDoc = docdao.moveDoc(docId, newFolderId);
+            		String serialized_doc = new Gson().toJson(updatedDoc);
             		response.setStatus(HttpServletResponse.SC_OK);
+            		response.setContentType("application/json");
+            		response.setCharacterEncoding("UTF-8");
+            		response.getWriter().println(serialized_doc);
                 }
     		}catch(SQLException e) {
-    			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Impossibile controllare se il nome utente esiste già");
+    			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        		response.getWriter().println("Unable to move document");
     		}
 
         } catch (NumberFormatException | NullPointerException e) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Impossibile estrarre i parametri della form");
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+	        response.getWriter().println("Invalid parameters");
         } catch (IllegalArgumentException e) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+        	response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+	        response.getWriter().println(e.getMessage());
         }
     }
-	
-	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		doPost(req, resp);
-	}
 	
 	@Override
 	public void destroy() {

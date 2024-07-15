@@ -152,6 +152,10 @@ input[type=submit]:hover {
 }
 
 .folderlist {
+	position: relative;
+	border-radius: 5px;
+	background-color: #f2f2f2;
+	padding: 20px;
 	width: 50%;
 	text-align: left;
     margin-left: auto;
@@ -164,6 +168,11 @@ input[type=submit]:hover {
 }
 
 .folderlist span {
+	font-weight: bold;
+	text-decoration: none;
+}
+
+.folderlist p {
 	text-decoration: none;
 }
 
@@ -251,8 +260,18 @@ button.transparentbutton {
 	color: white;
 }
 
-.document {
-	text-decoration: underline;
+.document .docinfocontainer p {
+	text-decoration: none;
+	font-size: 13px;
+}
+
+.docinfocontainer {
+	border: 1px solid #ccc;
+	width: 400px;
+	padding-left: 15px;
+	margin-top: 10px;
+	border-radius: 4px;
+	background-color: #f2f2f2;
 }
 
 .adddocumenttext {
@@ -286,6 +305,12 @@ button.transparentbutton {
 .emptytext {
 	margin-top: 100px;
 	margin-bottom: 100px;
+}
+
+#trashcontainer {
+	position: absolute;
+	top: 40px;
+	right: 40px;
 }
 
 @media (max-width: 480px) {

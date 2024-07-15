@@ -43,7 +43,7 @@ public class CreateFolder extends HttpServlet{
             // Aggiungi controlli sui parametri
             if (foldername == null || foldername.isEmpty()) {
             	response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-    			response.getWriter().println("Folder name must be not null");
+		        response.getWriter().println("Folder name must be not null");
             }
             
             //controllo che non esistano altre folders con lo stesso nome
@@ -52,7 +52,7 @@ public class CreateFolder extends HttpServlet{
     			if(!parentId.isEmpty()) {
 	    			if(!folderDAO.uniqueFolder(ownerId , Integer.parseInt(parentId), foldername)) {
 	    				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-	    				response.getWriter().println("A folder with the same name already exists");
+	    		        response.getWriter().println("A folder with the same name already exists");
 	    			} else {
 	                    Folder newFolder = folderDAO.createFolder(ownerId, foldername, Integer.parseInt(parentId));
 	                    String serialized_folder = new Gson().toJson(newFolder);
@@ -64,7 +64,7 @@ public class CreateFolder extends HttpServlet{
     			} else {
     				if(!folderDAO.uniqueRoot(ownerId, foldername)) {
 	    				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-	    				response.getWriter().println("A folder with the same name already exists");
+	    		        response.getWriter().println("A folder with the same name already exists");
 	    			} else {
 	                    Folder newFolder = folderDAO.createRootFolder(ownerId, foldername);
 	                    String serialized_folder = new Gson().toJson(newFolder);
@@ -75,13 +75,16 @@ public class CreateFolder extends HttpServlet{
 	                }
     			}
     		}catch(SQLException e) {
-    			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Impossibile controllare se il nome utente esiste già");
+    			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+		        response.getWriter().println("Impossibile controllare se il nome utente esiste gia'");
     		}
 
         } catch (NumberFormatException | NullPointerException e) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Impossibile estrarre i parametri della form");
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+	        response.getWriter().println("Impossibile estrarre i parametri della form");
         } catch (IllegalArgumentException e) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+        	response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+	        response.getWriter().println(e.getMessage());
         }
     }
 	

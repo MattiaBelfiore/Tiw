@@ -2,7 +2,6 @@ package beans;
 
 public class Doc {
     private int documentId;
-    private int ownerId;
     private int folderId;
     private String name;
     private String summary;
@@ -11,9 +10,8 @@ public class Doc {
     public Doc() {
     }
 
-    public Doc(int documentId, int ownerId, int folderId, String name, String summary, String type) {
+    public Doc(int documentId, int folderId, String name, String summary, String type) {
         this.documentId = documentId;
-        this.ownerId = ownerId;
         this.folderId = folderId;
         this.name = name;
         this.summary = summary;
@@ -26,14 +24,6 @@ public class Doc {
 
     public void setDocumentId(int documentId) {
         this.documentId = documentId;
-    }
-
-    public int getOwnerId() {
-        return ownerId;
-    }
-
-    public void setOwnerId(int ownerId) {
-        this.ownerId = ownerId;
     }
 
     public int getFolderId() {
@@ -72,7 +62,6 @@ public class Doc {
     public String toString() {
         return "Document{" +
                 "documentId=" + documentId +
-                ", ownerId=" + ownerId +
                 ", folderId=" + folderId +
                 ", name='" + name + '\'' +
                 ", summary='" + summary + '\'' +
