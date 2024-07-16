@@ -63,10 +63,17 @@ public class GoToMoveDocument extends HttpServlet{
 			e.printStackTrace();
 		}
 		
-		/*
-		 * if(!folders.stream().map(f -> f.getFolderId()).toList().contains(folderId)) {
-		 * resp.sendRedirect("/Logout"); }
-		 */
+		Folder fromFolder = null;
+		try {
+			fromFolder = folder.getFolderByOwner(userId, currentFolderId);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		if(fromFolder == null)
+			resp.sendRedirect("GoToHome?errorMsg=Invalid source folder"); 
+		
 
         String path ="/WEB-INF/Home.html";
         WebContext context = new WebContext(req, resp, getServletContext(), req.getLocale());
@@ -75,6 +82,7 @@ public class GoToMoveDocument extends HttpServlet{
         context.setVariable("docId", docId);
         context.setVariable("docName", docName);
         context.setVariable("from", currentFolderId);
+        context.setVariable("folderName", fromFolder.getFolderName());
         templateEngine.process(path, context, resp.getWriter());
 	}
 	

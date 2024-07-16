@@ -19,6 +19,9 @@
 		<h2>Folder List <a href="GoToContentManagement" class="contentmanagement" ><i class="fa-solid fa-pen-to-square icon"></i></a></h2>
 		<p th:if="${successMsg != null}" th:text=" ${successMsg}"></p>
 		<p th:if="${errorMsg != null}" th:text=" ${errorMsg}" class="error"></p>
+		<p th:if="${selectingDestination}" th:inline="text">
+	        You're moving the document [[${docName}]] from [[${folderName}]]. Choose the destination folder.
+	    </p>
 		<div class="folderlist" th:if="${folders.size() >0}">
 			<ul>
 		        <li th:each="folder : ${folders}">
