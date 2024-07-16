@@ -61,22 +61,23 @@ public class MoveDocument extends HttpServlet{
         DocDAO docdao = new DocDAO(connection);
         try {
         	FolderDAO folderdao = new FolderDAO(connection);
+        	String id = Integer.toString(to);
         	if(!folderdao.checkOwner(userId, to) || !folderdao.checkOwner(userId, from)) {
         		String errorMsg = "Invalid folder";
-				response.sendRedirect("GoToHome?errorMsg=" + URLEncoder.encode(errorMsg, "UTF-8"));
+        		response.sendRedirect("GoToContents?errorMsg=" + URLEncoder.encode(errorMsg, "UTF-8") + "&id=" + URLEncoder.encode(id, "UTF-8"));
 		        return;
 			}
         	
         	if(!docdao.uniqueFile(userId , to, docName)) {
         		String errorMsg = "A document with the same name already exists";
-				response.sendRedirect("GoToHome?errorMsg=" + URLEncoder.encode(errorMsg, "UTF-8"));
+				response.sendRedirect("GoToContents?errorMsg=" + URLEncoder.encode(errorMsg, "UTF-8") + "&id=" + URLEncoder.encode(id, "UTF-8"));
 			} else {
 				if(docdao.moveDoc(docId,from,to)) {
 					String successMsg = "Document successfully moved";
-					response.sendRedirect("GoToHome?successMsg=" + URLEncoder.encode(successMsg, "UTF-8"));
+					response.sendRedirect("GoToContents?successMsg=" + URLEncoder.encode(successMsg, "UTF-8") + "&id=" + URLEncoder.encode(id, "UTF-8"));
 				} else {
-					String successMsg = "Unauthorized move";
-					response.sendRedirect("GoToHome?errorMsg=" + URLEncoder.encode(successMsg, "UTF-8"));
+					String errorMsg = "Unauthorized move";
+					response.sendRedirect("GoToContents?errorMsg=" + URLEncoder.encode(errorMsg, "UTF-8") + "&id=" + URLEncoder.encode(id, "UTF-8"));
 				}
 			}
 		} catch (SQLException e) {
