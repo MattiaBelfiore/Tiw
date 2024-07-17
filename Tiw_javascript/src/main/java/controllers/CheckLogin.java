@@ -62,8 +62,7 @@ public class CheckLogin extends HttpServlet {
 			//user = userDao.checkCredentials(id, secure_pwd);
 			user = userDao.checkCredentials(username, password);
 		} catch (SQLException e) {
-			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
-					"Not Possible to check credentials aka BRO STO DATABASE SI FA I CAZZI SUOI");
+			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Not Possible to check credentials");
 			return;
 		}
 
