@@ -92,6 +92,17 @@ body {
 	font-family: 'Orbitron', courier, sans-serif;
 	font-size: 20px;
 }
+input[type=email] {
+	width: 90%;
+	padding: 12px 15px;
+	margin: 8px 0;
+	display: inline-block;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	box-sizing: border-box;
+	font-family: 'Orbitron', courier, sans-serif;
+	font-size: 20px;
+}
 
 input[type=button] {
 	width: 90%;
@@ -154,7 +165,6 @@ input[type=submit]:hover {
 .folderlist {
 	position: relative;
 	border-radius: 5px;
-	background-color: #f2f2f2;
 	padding: 20px;
 	width: 50%;
 	text-align: left;

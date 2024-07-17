@@ -33,7 +33,7 @@ function showFolders(request) {
 	            folderContainer.appendChild(folderList);
 	            document.getElementById('emptytext').style.visibility = "hidden";
 	            document.getElementById('emptytext').classList.remove("emptytext");
-	            document.getElementById('trash').style.visibility = "visible";
+	            document.getElementById('trashcontainer').style.visibility = "visible";
 	            enableDragAndDrop();
 	        }
 	        fetchDocs();
@@ -285,7 +285,7 @@ function addSubfolder(parentId, subfolderName, parentElement) {
 		        if(data) {
 		            document.getElementById('emptytext').style.visibility = "hidden";
 					document.getElementById('emptytext').classList.remove("emptytext");
-					document.getElementById('trash').style.visibility = "visible";
+					document.getElementById('trashcontainer').style.visibility = "visible";
 					document.getElementById("errorMsg").innerHTML = "";
 					
 		            const newSubfolderElement = document.createElement('li');
@@ -468,7 +468,7 @@ function initTrashCan() {
 				            if(document.querySelectorAll('.folder').length == 0) {
 								document.getElementById('emptytext').style.visibility = "visible";
 								document.getElementById('emptytext').classList.add("emptytext");
-								document.getElementById('trash').style.visibility = "hidden";
+								document.getElementById('trashcontainer').style.visibility = "hidden";
 							}
 						} else {
 							var message = request.responseText;

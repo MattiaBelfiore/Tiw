@@ -1,9 +1,6 @@
 package it.polimi.tiw.Project.controllers;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -73,18 +70,6 @@ public class CheckLogin extends HttpServlet {
 			ctx.setVariable("errorMsg", "No Password Inserted!");
 			String path = "/index.html";
 			templateEngine.process(path, ctx, response.getWriter());
-		}
-
-
-
-		MessageDigest digest;
-		try {
-			digest = MessageDigest.getInstance("SHA-1");
-			byte[] hash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
-			//secure_pwd = HexString.toHexString(hash);
-		} catch (NoSuchAlgorithmException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
 		}
 
 		// query db to authenticate for user

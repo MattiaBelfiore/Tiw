@@ -51,11 +51,6 @@ public class GoToContentManagement extends HttpServlet{
         
     	User user = (User) session.getAttribute("user");
     	int userId = user.getId();
-        // Se la sessione non esiste o non contiene l'ID dell'utente, reindirizza al login
-        if (session == null || session.getAttribute("user") == null) {
-            response.sendRedirect("/CheckLogin");
-            return;
-        }
         
         String errorMsgRF = request.getParameter("errorMsgRF");
         String errorMsgF = request.getParameter("errorMsgF");

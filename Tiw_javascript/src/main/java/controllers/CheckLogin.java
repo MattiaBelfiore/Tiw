@@ -1,9 +1,6 @@
 package controllers;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -56,18 +53,6 @@ public class CheckLogin extends HttpServlet {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			response.getWriter().println("Password must be not null");
 			return;
-		}
-
-
-
-		MessageDigest digest;
-		try {
-			digest = MessageDigest.getInstance("SHA-1");
-			byte[] hash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
-			//secure_pwd = HexString.toHexString(hash);
-		} catch (NoSuchAlgorithmException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
 		}
 
 		// query db to authenticate for user

@@ -149,7 +149,6 @@ public class RegistrationAgent extends HttpServlet{
 			 * Se entra nell'else vuol dire che � tutto a posto e posso creare l'utente nel DB senza fare ulteriori controlli.
 			 */
 			UserDAO userDAO = new UserDAO(connection);
-			String path;
 			try {
 					userDAO.createUser(username, name, surname, email, pwd);
 					
