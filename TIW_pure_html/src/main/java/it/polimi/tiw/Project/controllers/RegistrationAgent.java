@@ -128,7 +128,7 @@ public class RegistrationAgent extends HttpServlet{
 			/*controllo i boolean in ordine di importanza del tipo di errore per vedere qual � l'errore e stampare a video il giusto messaggio di errore
 			 * (il primo per importanza)*/
 			if(userEsistente) {
-				ctx.setVariable("errorMsg", "Username già esistente.");
+				ctx.setVariable("errorMsg", "Username gia' esistente.");
 			}
 			else if(lunghezzaCampiEsagerata) {
 				ctx.setVariable("errorMsg", "Lunghezza massima per i campi Username e Password di 15 caratteri.");

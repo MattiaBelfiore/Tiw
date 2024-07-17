@@ -16,7 +16,7 @@
                 <label for="folderName">Root Folder Name:</label>
                 <input type="text" id="folderName" name="folderName" placeholder="Enter folder name" required>
                 <input type="submit" value="create root folder">
-                <p th:if="${errorMsgRF != null}" th:text=" ${errorMsgRF}"></p>
+                <p th:if="${errorMsgRF != null}" th:text=" ${errorMsgRF}" class="error"></p>
             </form>
             <hr>
             <form action="createFolder" method="post">
@@ -29,7 +29,7 @@
 		                    th:text="${folder.folderName}">Folder Name</option>
 		        </select>
                 <input type="submit" value="create folder">
-                <p th:if="${errorMsgF != null}" th:text=" ${errorMsgF}"></p>
+                <p th:if="${errorMsgF != null}" th:text=" ${errorMsgF}" class="error"></p>
             </form>
             <hr>
             <!-- Form to create a document -->

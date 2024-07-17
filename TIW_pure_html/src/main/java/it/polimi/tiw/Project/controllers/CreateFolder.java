@@ -72,11 +72,13 @@ public class CreateFolder extends HttpServlet{
                     response.sendRedirect("GoToHome");
                 }
     		}catch(SQLException e) {
-    			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Impossibile controllare se il nome utente esiste già");
+    			String errorMsg = "Impossibile controllare se il nome utente esiste già";
+    			response.sendRedirect("GoToContentManagement?errorMsgF=" + URLEncoder.encode(errorMsg, "UTF-8"));
     		}
 
         } catch (NumberFormatException | NullPointerException e) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Impossibile estrarre i parametri della form");
+        	String errorMsg = "Impossibile estrarre i parametri della form";
+			response.sendRedirect("GoToContentManagement?errorMsgF=" + URLEncoder.encode(errorMsg, "UTF-8"));
         } catch (IllegalArgumentException e) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
         }

@@ -20,7 +20,7 @@
 		<p th:if="${successMsg != null}" th:text=" ${successMsg}"></p>
 		<p th:if="${errorMsg != null}" th:text=" ${errorMsg}" class="error"></p>
 		<p th:if="${selectingDestination}" th:inline="text">
-	        You're moving the document [[${docName}]] from [[${folderName}]]. Choose the destination folder.
+	        You're moving the document <i>[[${docName}]]</i> from <i>[[${folderName}]]</i>. Choose the destination folder.
 	    </p>
 		<div class="folderlist" th:if="${folders.size() >0}">
 			<ul>

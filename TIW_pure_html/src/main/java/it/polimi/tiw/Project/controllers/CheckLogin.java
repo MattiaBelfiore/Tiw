@@ -10,6 +10,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
@@ -38,8 +39,11 @@ public class CheckLogin extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		HttpSession session = request.getSession(false);
+		if(session != null && session.getAttribute("user") != null)
+			response.sendRedirect("GoToHome");
+		
 		String path;
-
 		ServletContext servletContext = getServletContext();
 		final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
 		path = "/index.html";
@@ -79,8 +83,7 @@ public class CheckLogin extends HttpServlet {
 			//user = userDao.checkCredentials(id, secure_pwd);
 			user = userDao.checkCredentials(username, password);
 		} catch (SQLException e) {
-			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
-					"Not Possible to check credentials aka BRO STO DATABASE SI FA I CAZZI SUOI");
+			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Not Possible to check credentials");
 			return;
 		}
 

@@ -49,6 +49,8 @@
 			<p th:if="${folder.children.size()==0 && docs.size()==0}" class="emptytext">No contents. Click on the pencil on the previous page to add contents to this folder</p>
         </div>
         <p th:if="${folder == null}" class="emptytext">No contents. Invalid id folder</p>
+        <p th:if="${errorMsg != null}" th:text="${errorMsg}" class="error"></p>
+        <p th:if="${successMsg != null}" th:text="${successMsg}"></p>
     </div>
     <br>
 	<a href="GoToHome">Go back</a>

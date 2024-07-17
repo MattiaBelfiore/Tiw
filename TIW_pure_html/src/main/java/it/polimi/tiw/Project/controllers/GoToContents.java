@@ -53,6 +53,9 @@ public class GoToContents extends HttpServlet{
         
     	User user = (User) session.getAttribute("user");
     	int userId = user.getId();
+    	
+    	String errorMsg = request.getParameter("errorMsg");
+    	String successMsg = request.getParameter("successMsg");
         
         int folderId;
         try {
@@ -83,6 +86,8 @@ public class GoToContents extends HttpServlet{
         WebContext context = new WebContext(request, response, getServletContext(), request.getLocale());
         context.setVariable("folder", folder);
         context.setVariable("docs", docs);
+        context.setVariable("successMsg", successMsg);
+        context.setVariable("errorMsg", errorMsg);
 
         templateEngine.process(path, context, response.getWriter());
     }
